@@ -1,0 +1,6 @@
+<h1>Upload CSV File</h1>
+<%= form_tag(data_handle_upload_path, multipart: true) do %>
+    <%= file_field_tag 'journey_csv', class: 'form-control' %>
+
+    <%= submit_tag 'Upload', class: 'btn btn-primary' %>
+<% end %>

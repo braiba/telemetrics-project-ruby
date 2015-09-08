@@ -1,0 +1,38 @@
+<% content_for :head do %>
+    <script type="text/javascript">
+        var API_KEY = 'AIzaSyC8oiTZM3rI7Ugl3RKKL4Uk_cxG1M_YICo';
+
+        function loadJourneyMap(container) {
+            var container = $('#journeyMap');
+            var img = $('<img>');
+            var width = 600;
+            var height = 400;
+
+            var baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
+            <% journey = @current_journey %>
+            var queryParams = [
+                ['center', '<%= journey.central_point.to_coords %>'],
+                ['path', 'color:red|weight:3|<%= journey.gmaps_path %>'],
+                ['size', width + 'x' + height],
+                ['markers', 'color:red|label:S|<%= journey.first_point.to_coords %>'],
+                ['markers', 'color:red|label:F|<%= journey.last_point.to_coords %>'],
+                ['key', API_KEY]
+            ];
+            var src = floow.url.build(baseUrl, queryParams);
+
+            img.attr('width', width);
+            img.attr('height', height);
+            img.attr('src', src);
+
+            container.append(img);
+        }
+
+        $(document).ready(function() {
+           loadJourneyMap($('#journeyMap'));
+        });
+    </script>
+<% end %>
+
+
+<h1>Journey Map</h1>
+<div id="journeyMap"></div>

@@ -1,0 +1,10 @@
+<ul>
+    <li class="first"><a href="/">Upload</a></li>
+    <% if has_journey? %>
+        <li><%= link_to 'Map', data_map_path %></li>
+        <li><%= link_to 'Stats', data_stats_path %></li>
+        <li><%= link_to 'Speed Chart', data_chart_path %></li>
+        <li><%= link_to 'Select', data_select_path %></li>
+    <% end %>
+  <li class="last"><%= link_to 'Log out', logout_path %></li>
+</ul>

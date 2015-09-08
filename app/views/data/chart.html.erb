@@ -1,0 +1,54 @@
+<% content_for :head do %>
+    <script type="text/javascript">
+        /**
+         * Generate the speed graph
+         *
+         * @param {object}   container the container DOM object to generate the graph into
+         * @param {object[]} rows      the route data
+         */
+        function generateSpeedGraph(container, rows)
+        {
+            var speedFunc = function(row) {return row.speed;};
+            var timeFunc  = function(row) {return row.time;};
+
+            var avgSpeed = d3.sum(rows, speedFunc) / rows.length;
+            var maxSpeed = d3.max(rows, speedFunc);
+
+            var minTime = d3.min(rows, timeFunc);
+            var maxTime = d3.max(rows, timeFunc);
+
+            var avgMark = floow.graph.line.horizontalMark(maxSpeed)
+                .label('Fastest Speed: ' + maxSpeed.toFixed(2) + ' kph');
+            var maxMark = floow.graph.line.horizontalMark(avgSpeed)
+                .label('Average Speed: ' + avgSpeed.toFixed(2) + ' kph');
+
+            var graph = floow.graph.line()
+                .height(400)
+                .margins(5, 5, 55, 45)
+                .data(rows)
+                .xDomain(minTime, maxTime)
+                .yDomain(0, 1.10 * maxSpeed)
+                .xFunc(timeFunc)
+                .yFunc(speedFunc)
+                .xTickFormatter(function(time) {return time.toLocaleTimeString();})
+                .yTickFormatter(function(speed) {return speed + ' kph';})
+                .addHorizontalMark(maxMark)
+                .addHorizontalMark(avgMark);
+
+            container.call(graph);
+        }
+
+        $(document).ready(function() {
+            var rows = [
+                <% current_journey.journey_datums.each do |datum| %>
+                    {time: new Date(<%= datum.timestamp %>), speed: <%= datum.speed %>},
+                <% end %>
+            ];
+            generateSpeedGraph(d3.select("#speedGraph"), rows);
+        });
+
+    </script>
+<% end %>
+
+<h1>Speed Chart</h1>
+<div id="speedGraph" class="block"></div>

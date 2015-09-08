@@ -1,0 +1,69 @@
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+.block {
+  text-align: center;
+}
+
+.header {
+  font-size: 16pt;
+  margin-top: 16px;
+}
+
+.graph path,
+.axis line,
+.marker line {
+  fill: none;
+}
+
+.graph path {
+  stroke: blue;
+  stroke-width: 1.5;
+}
+
+.axis path,
+.axis line,
+.marker line {
+  stroke: #000;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.marker line {
+  stroke: blue;
+  stroke-width: 1;
+  stroke-dasharray: 4, 3;
+}
+
+.axis text,
+.marker text{
+  font-size: 10px;
+}
+
+.marker text {
+  fill:    blue;
+}
+
+table.keyValue {
+  border-collapse: collapse;
+  border: solid 1px black;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+table.keyValue th {
+  text-align: right;
+  padding: 4px 6px 2px 12px;
+  background: #DDD;
+  border-right: solid 1px #BBB;
+}
+
+table.keyValue td {
+  text-align: left;
+  padding: 4px 6px 2px 6px;
+}

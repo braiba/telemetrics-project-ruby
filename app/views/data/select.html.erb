@@ -1,0 +1,6 @@
+<h1>Journey List</h1>
+<% current_user.journeys.each do |journey| %>
+    <p>
+      <%= link_to journey.formatted_timespan + ' Journey', data_select_journey_path(journey) %>
+    </p>
+<% end %>

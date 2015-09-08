@@ -1,0 +1,29 @@
+<h1>Journey Stats</h1>
+<table class="keyValue">
+    <tbody>
+        <tr>
+            <th>Distance Travelled:</th>
+            <td><%= current_journey.total_distance.round(1) %> m</td>
+        </tr>
+        <tr>
+            <th>Fastest Speed:</th>
+            <td><%= current_journey.max_speed.round(2) %> kph</td>
+        </tr>
+        <tr>
+            <th>Average Speed:</th>
+            <td><%= current_journey.average_speed.round(2) %> kph</td>
+        </tr>
+        <tr>
+          <th>Highest Point:</th>
+          <td><%= current_journey.highest_point.to_html %></td>
+        </tr>
+        <tr>
+          <th>Average Altitude:</th>
+          <td><%= current_journey.average_altitude.round(2) %> m</td>
+        </tr>
+        <tr>
+          <th>Central Point:</th>
+          <td><%= current_journey.central_point.to_html %></td>
+        </tr>
+    </tbody>
+</table>
