@@ -13,28 +13,28 @@
 
 ActiveRecord::Schema.define(version: 20150831083655) do
 
-  create_table "journey_data", force: :cascade do |t|
-    t.integer "journey_id"
-    t.integer "row_index"
-    t.float   "distance"
-    t.decimal "timestamp"
-    t.decimal "speed"
-    t.decimal "altitude"
-    t.decimal "longitude"
-    t.decimal "latitude"
+  create_table 'journey_data', force: :cascade do |t|
+    t.integer 'journey_id'
+    t.integer 'row_index'
+    t.float   'distance'
+    t.decimal 'timestamp'
+    t.decimal 'speed'
+    t.decimal 'altitude'
+    t.decimal 'longitude'
+    t.decimal 'latitude'
   end
 
-  create_table "journeys", force: :cascade do |t|
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table 'journeys', force: :cascade do |t|
+    t.integer  'user_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "username"
-    t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+  create_table 'users', force: :cascade do |t|
+    t.string   'username'
+    t.string   'password_digest'
+    t.datetime 'created_at',      null: false
+    t.datetime 'updated_at',      null: false
   end
 
 end

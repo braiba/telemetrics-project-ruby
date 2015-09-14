@@ -36,6 +36,33 @@ body {
   text-align: right;
 }
 
+.info_block {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  color: #333333;
+  background-color: #FAFAFA;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+
+.large_list {
+  list-style-type: none;
+  margin: 10px 0 10px 30px;
+  text-align: left;
+  li {
+    background: transparent url('/assets/large-chevron-bullet.png') no-repeat 0.05em 50%;
+    line-height: 1.5em;
+    padding-left: 2em;
+    margin-bottom: 0.3em;
+  }
+}
+
 #outer_wrapper {
   border-top: solid black 2px;
   background: white;
@@ -53,7 +80,7 @@ body {
   a {
     display: block;
     float: left;
-    background: transparent url(/assets/thefloow-logo.png) no-repeat 50% 50%;
+    background: transparent url('/assets/thefloow-logo.png') no-repeat 50% 50%;
     text-indent: -40000px;
     width: 170px;
     height: 85px;
@@ -77,14 +104,14 @@ body {
       &:hover {
         color: #7ab9d9;
         cursor: pointer;
-        background: transparent url(//cdn-assets.thefloow.com/site/assets/top_menu_bg-c2ce72425e7539c01ee58fc69d3ccca4.png) no-repeat 0% 0;
+        background: transparent url(//cdn-assets.thefloow.com/site/assets/top_menu_bg-c2ce72425e7539c01ee58fc69d3ccca4.png) no-repeat 0 0;
       }
       color: #fff;
       text-decoration: none;
       font-family: 'Montserrat', sans-serif;
       font-weight: 400;
       font-size: 0.8em;
-      text-shadow: 0px 1px 1px #000;
+      text-shadow: 0 1px 1px #000;
       text-transform: uppercase;
       padding: 35px 2.25em 0 2.25em;
       height: 50px;
@@ -125,12 +152,12 @@ footer {
     padding-top: 10px;
   }
   .eu_charter {
-    background: transparent url(//cdn-assets.thefloow.com/site/assets/footer_badge_EU_commission-549f72ebfeda84ff3916c75530c43430.jpg) no-repeat 0% 0%;
+    background: transparent url(//cdn-assets.thefloow.com/site/assets/footer_badge_EU_commission-549f72ebfeda84ff3916c75530c43430.jpg) no-repeat 0 0;
     padding: 10px 0 10px 90px;
     margin-bottom: 10px;
   }
   .rospa_member {
-    background: transparent url(//cdn-assets.thefloow.com/site/assets/footer_badge_RoSPA_member-7da9be5887a24ae4596170ae84a92e39.jpg) no-repeat 0% 0%;
+    background: transparent url(//cdn-assets.thefloow.com/site/assets/footer_badge_RoSPA_member-7da9be5887a24ae4596170ae84a92e39.jpg) no-repeat 0 0;
     padding: 10px 0 50px 60px;
   }
 }
