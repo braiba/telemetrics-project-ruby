@@ -1,4 +1,8 @@
+module Floow
 class LatLong
+  unloadable
+  require 'Haversine'
+
   def initialize(latitude, longitude)
     @latitude = latitude
     @longitude = longitude
@@ -24,31 +28,38 @@ class LatLong
     ('(' + latitude_to_html(@latitude) + ',' + longitude_to_html(@longitude) + ')').html_safe
   end
 
+  def distance (dest)
+    Haversine.distance(latitude, longitude, dest.latitude, dest.longitude) * 1000
+  end
+
   protected
   def latitude_to_s(latitude)
-    angle_to_s(latitude) + (latitude < 0 ? 'W' : 'E')
+    angle_to_s(latitude.abs) + (latitude >= 0 ? 'N' : 'S')
   end
 
   def latitude_to_html(latitude)
-    (angle_to_html(latitude) + (latitude < 0 ? 'W' : 'E')).html_safe
+    (angle_to_html(latitude.abs) + (latitude >= 0 ? 'N' : 'S')).html_safe
   end
 
   def longitude_to_s(longitude)
-    angle_to_s(longitude) + (longitude < 0 ? 'S' : 'N')
+    angle_to_s(longitude.abs) + (longitude >= 0 ? 'E' : 'W')
   end
 
   def longitude_to_html(longitude)
-    (angle_to_html(longitude) + (longitude < 0 ? 'S' : 'N')).html_safe
+    (angle_to_html(longitude.abs) + (longitude >= 0 ? 'E' : 'W')).html_safe
   end
 
   def angle_to_s(angle)
-    dms = angle_to_dms(angle)
-    dms[:degrees].to_s + "\u00B0" + dms[:minutes].to_s + "\u2019" + dms[:seconds].to_s + "\u201D"
+    format_angle(angle, "\u00B0", "\u2019", "\u201D").html_safe
   end
 
   def angle_to_html(angle)
+    format_angle(angle, '&#0176;', '&#8217;', '&#8221;').html_safe
+  end
+
+  def format_angle(angle, deg_sym, min_sym, sec_sym)
     dms = angle_to_dms(angle)
-    (dms[:degrees].to_s + '&#0176;' + dms[:minutes].to_s + '&#8217;' + dms[:seconds].to_s + '&#8221;').html_safe
+    dms[:degrees].to_s + deg_sym + ('%02d' % dms[:minutes]) + min_sym + ('%04.1f' % dms[:seconds]) + sec_sym
   end
 
   def angle_to_dms (angle)
@@ -56,7 +67,7 @@ class LatLong
     angle = 60 * (angle - degrees)
     minutes = angle.floor
     angle = 60 * (angle - minutes)
-    seconds = (angle * 10).round / 10
+    seconds = angle
 
     {
         degrees: degrees,
@@ -64,4 +75,5 @@ class LatLong
         seconds: seconds,
     }
   end
+end
 end

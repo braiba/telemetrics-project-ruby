@@ -14,8 +14,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # Use Bootstrap to save time on the layout
 gem 'bootstrap-sass', '3.2.0.0'
-# Library for calculating distances between longitude, latitude pairs
-gem 'geo-distance', '~> 0.2.0'
+# Library for calculating distances between longitude, latitude pairs (tried geo-distance, but it just broke everything)
+gem 'haversine_distance', '~> 1.0.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -38,6 +38,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  # Code coverage
+  gem 'simplecov', :require => false
 end
 
 group :development do

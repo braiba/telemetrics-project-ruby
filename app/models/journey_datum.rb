@@ -1,6 +1,8 @@
 class JourneyDatum < ActiveRecord::Base
-  def to_latlong
-    LatLong.new(latitude, longitude)
+  require 'floow/lat_long'
+
+  def to_lat_long
+    Floow::LatLong.new(latitude, longitude)
   end
 
   belongs_to :journey

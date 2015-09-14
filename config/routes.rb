@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'index#index'
+  root 'data#upload'
 
   get 'data/upload'
   post 'data/process', to: 'data#handle_upload', as: 'data_handle_upload'
@@ -12,7 +12,6 @@ Rails.application.routes.draw do
 
   get 'login', to: 'login#index', as: 'login'
   get 'logout', to: 'login#logout', as: 'logout'
-  get 'login/index'
   post 'login/auth'
 
   # The priority is based upon order of creation: first created -> highest priority.

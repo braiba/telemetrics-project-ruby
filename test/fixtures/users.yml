@@ -2,10 +2,10 @@
 
 one:
   id: 1
-  username: MyString
-  passwordHash: MyString
+  username: DummyUsername1
+  password_digest: $2a$10$4pJzckkrV.lredQCuAQxpulLt2ptGGl9uWXGBeD.W7/b7ZXiO527G # password
 
 two:
-  id: 1
-  username: MyString
-  passwordHash: MyString
+  id: 2
+  username: DummyUsername2
+  password_digest: $2a$10$Z58ZF8W5AbHo3odCSag41.zofroqibvfx1IinyNBR/ucBb3coTKhG # floow

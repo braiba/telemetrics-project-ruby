@@ -1,7 +1,9 @@
 class DataController < ApplicationController
   require 'csv'
 
-  helper_method :current_journey, :has_journey?
+  before_filter :require_journey
+
+  helper_method :current_journey, :has_journey?, :journeys_available?
 
   def upload
     # Empty controller action
@@ -23,36 +25,27 @@ class DataController < ApplicationController
   end
 
   def map
-    unless has_journey?
-      flash[:warning] = 'No journey'
-      redirect_to data_upload_path and return
-    end
+    # Empty controller action
   end
 
   def stats
-    unless has_journey?
-      flash[:warning] = 'No journey'
-      redirect_to data_upload_path and return
-    end
+    # Empty controller action
   end
 
   def chart
-    unless has_journey?
-      flash[:warning] = 'No journey'
-      redirect_to data_upload_path and return
-    end
+    # Empty controller action
   end
 
   def select
-    unless has_journey?
-      redirect_to data_upload_path and return
-    end
+    # Empty controller action
   end
 
   def select_journey
     session[:journey_id] = params[:id]
     redirect_to data_map_path
   end
+
+  protected
 
   # Returns the current journey (if any).
   def current_journey
@@ -62,5 +55,18 @@ class DataController < ApplicationController
   # Returns true if the user has a current journey, false otherwise.
   def has_journey?
     !current_journey.nil?
+  end
+
+  def journeys_available?
+    !current_user.journeys.nil?
+  end
+
+  private
+  def require_journey
+    journey_actions = %w(map stats chart)
+    if journey_actions.include? action_name and !has_journey?
+      flash[:warning] = 'No journey'
+      redirect_to data_upload_path
+    end
   end
 end

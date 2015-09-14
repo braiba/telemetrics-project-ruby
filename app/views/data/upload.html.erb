@@ -1,4 +1,16 @@
 <h1>Upload CSV File</h1>
+
+<div class="infoBlock">
+  <p>You journey file should be a csv with the following column headings:</p>
+  <ul>
+    <li>millis</li>
+    <li>speed</li>
+    <li>altitude</li>
+    <li>latitude</li>
+    <li>longitude</li>
+  </ul>
+</div>
+
 <%= form_tag(data_handle_upload_path, multipart: true) do %>
     <%= file_field_tag 'journey_csv', class: 'form-control' %>
 

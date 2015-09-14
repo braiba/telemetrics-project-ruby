@@ -7,6 +7,6 @@ class CreateUsers < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    User.new(username: 'floow', password: 'floow', password_confirmation: 'floow').save
+    User.new(username: 'floow', password: 'password', password_confirmation: 'password').save
   end
 end

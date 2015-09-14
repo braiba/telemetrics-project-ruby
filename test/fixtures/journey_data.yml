@@ -1,19 +1,28 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+big_ben:
   journey_id: 1
-  index: 0
-  distance: 1.5
-  speed: 9.99
-  altitude: 9.99
-  longitude: 9.99
-  latitude: 9.99
+  row_index: 0
+  distance: 0.1
+  speed: 1.00
+  altitude: 5.00
+  latitude: 51.5008
+  longitude: 0.1247
 
-two:
+tower_bridge:
   journey_id: 1
-  index: 0
-  distance: 1.5
-  speed: 9.99
-  altitude: 9.99
-  longitude: 9.99
-  latitude: 9.99
+  row_index: 1
+  distance: 0.2
+  speed: 2.00
+  altitude: 6.00
+  latitude: 51.5056
+  longitude: 0.0756
+
+london_eye:
+  journey_id: 1
+  row_index: 2
+  distance: 0.15
+  speed: 1.50
+  altitude: 5.50
+  latitude: 51.5033
+  longitude: 0.1197

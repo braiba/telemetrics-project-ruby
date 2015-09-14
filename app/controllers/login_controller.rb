@@ -1,10 +1,13 @@
 class LoginController < ApplicationController
+
+  skip_before_filter :require_login
+
   def index
   end
 
   def auth
-    username = params[:session][:username]
-    password = params[:session][:password]
+    username = params[:login][:username]
+    password = params[:login][:password]
 
     user = User.find_by(username: username)
     if user && user.authenticate(password)
@@ -18,6 +21,7 @@ class LoginController < ApplicationController
 
   def logout
     session.delete(:user_id)
+    session.delete(:journey_id)
     flash[:success] = 'You have been logged out'
     redirect_to login_path
   end

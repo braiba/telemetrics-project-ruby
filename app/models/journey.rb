@@ -1,5 +1,6 @@
 class Journey < ActiveRecord::Base
-  require 'geo-distance'
+  require 'floow/lat_long'
+  require 'floow/sql_insert_batcher'
 
   belongs_to :user
 
@@ -10,65 +11,43 @@ class Journey < ActiveRecord::Base
 
     journey.save
 
-    row_index      = 0
-    distance       = 0
-    prev_latitude  = nil
-    prev_longitude = nil
+    row_index  = 0
+    distance   = 0
+    prev_point = nil
 
-    connection = ActiveRecord::Base.connection
-    logger     = ActiveRecord::Base.logger
-
-    prev_log_level = logger.level
-    logger.level   = Logger::INFO
-
-    column_names   = %w(journey_id row_index distance timestamp speed altitude longitude latitude)
-    sql_inserts    = []
-    max_batch_size = 500
+    column_names       = %w(journey_id row_index distance timestamp speed altitude latitude longitude)
+    sql_insert_batcher = Floow::SqlInsertBatcher.new('journey_datum', column_names)
 
     csv.each do |row|
+      millis    = row['millis'].to_f
+      speed     = row['speed'].to_f
+      altitude  = row['altitude'].to_f
+      latitude  = row['latitude'].to_f
+      longitude = row['longitude'].to_f
 
-      if prev_latitude != nil then
-        distance = 0.1
-        #distance = GeoDistance::Haversine.geo_distance(
-        #    row['latitude'],
-        #    row['longitude'],
-        #    prev_latitude,
-        #    prev_longitude
-        #).to_meters
+      curr_point = Floow::LatLong.new(latitude, longitude)
+
+      if prev_point != nil
+        distance = prev_point.distance curr_point
       end
 
-      sql_insert_values = [
+      sql_insert_batcher.push [
         journey.id,
         row_index,
         distance,
-        row['millis'].to_f,
-        row['speed'].to_f,
-        row['altitude'].to_f,
-        row['longitude'].to_f,
-        row['latitude'].to_f,
+        millis,
+        speed,
+        altitude,
+        latitude,
+        longitude,
       ]
 
-      sql_inserts.push '(' + sql_insert_values.join(', ') + ')'
-
-      if sql_inserts.length == max_batch_size
-        sql = 'INSERT INTO journey_data (' + column_names.join(', ') + ') VALUES ' + sql_inserts.join(', ') + ';'
-        connection.execute sql
-
-        sql_inserts = []
-      end
-
-      prev_latitude  = row['latitude']
-      prev_longitude = row['longitude']
+      prev_point = curr_point
 
       row_index += 1
     end
 
-    if sql_inserts.length != 0
-      sql = 'INSERT INTO journey_data (' + column_names.join(', ') + ') VALUES ' + sql_inserts.join(', ') + ';'
-      connection.execute sql
-    end
-
-    logger.level = prev_log_level
+    sql_insert_batcher.flush
 
     return journey
   end
@@ -98,11 +77,11 @@ class Journey < ActiveRecord::Base
   end
 
   def min_altitude
-    @max_altitude ||= journey_datums.minimum(:altitude)
+    @min_altitude ||= journey_datums.minimum(:altitude)
   end
 
   def average_altitude
-    @max_altitude ||= journey_datums.average(:altitude)
+    @average_altitude ||= journey_datums.average(:altitude)
   end
 
   def highest_point
@@ -110,19 +89,22 @@ class Journey < ActiveRecord::Base
       return @highest_point
     end
 
-    # DEBUG
-    latitude = journey_datums.maximum(:latitude)
-    longitude = journey_datums.maximum(:longitude)
+    journey_datums.each do |datum|
+      if datum.altitude == max_altitude
+        @highest_point = Floow::LatLong.new(datum.latitude, datum.longitude)
+        break
+      end
+    end
 
-    @highest_point = LatLong.new(latitude, longitude)
+    @highest_point
   end
 
   def first_point
-    journey_datums.first.to_latlong
+    journey_datums.first.to_lat_long
   end
 
   def last_point
-    journey_datums.last.to_latlong
+    journey_datums.last.to_lat_long
   end
 
   def central_point
@@ -130,10 +112,10 @@ class Journey < ActiveRecord::Base
       return @central_point
     end
 
-    latitude = (journey_datums.maximum(:latitude) + journey_datums.minimum(:latitude)) / 2
+    latitude  = (journey_datums.maximum(:latitude) + journey_datums.minimum(:latitude)) / 2
     longitude = (journey_datums.maximum(:longitude) + journey_datums.minimum(:longitude)) / 2
 
-    @central_point = LatLong.new(latitude, longitude)
+    @central_point = Floow::LatLong.new(latitude, longitude)
   end
 
   def formatted_timespan
@@ -145,14 +127,15 @@ class Journey < ActiveRecord::Base
     start_date + ' ' + start_time + ' - ' + (end_date != start_date ? end_date + ' ' : '') + end_time
   end
 
+  # Returns a path string that can be used to describe the journey to the Google Maps API
   def gmaps_path
     points = []
 
     # we can't include every point, because there's a limit on how long a query string can be
     max_points = 50
-    step_size = [(journey_datums.length / max_points).floor, 1].max
+    step_size  = [(journey_datums.length / max_points).floor, 1].max
     journey_datums.where('row_index % ' + step_size.to_s + ' = 0').each do |journey_datum|
-      points.push journey_datum.to_latlong.to_coords
+      points.push journey_datum.to_lat_long.to_coords
     end
 
     # always include the last point
