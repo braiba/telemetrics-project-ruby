@@ -33,7 +33,7 @@ class DataController < ApplicationController
   end
 
   def chart
-    # Empty controller action
+    render layout: 'full_width'
   end
 
   def select
